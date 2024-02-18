@@ -11,7 +11,7 @@ export const sqlDeleteRowRoute = `${host}/api/sql/tables/data/delete`
 
 
 export const mongoCreateDocumentRoute = `${host}/api/mongo/documents/data/create`
-export const mongoEditDocumentRoute =   `${host}/api/mongo/documents/data/editt`
+export const mongoEditDocumentRoute =   `${host}/api/mongo/documents/data/edit`
 export const mongoDeleteDocumentRoute = `${host}/api/mongo/documents/data/delete`
 
 

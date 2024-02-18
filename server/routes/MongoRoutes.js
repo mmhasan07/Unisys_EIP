@@ -7,7 +7,7 @@ router.get("/documents/get", getDocuments );
 router.get("/documents/data/get/:documentName", getDocumentData );
 
 router.post("/documents/data/create", createDocument );
-router.put("/documents/data/editt", editDocument );
+router.put("/documents/data/edit", editDocument );
 router.delete("/documents/data/delete", deleteDocument );
 
 module.exports = router;
