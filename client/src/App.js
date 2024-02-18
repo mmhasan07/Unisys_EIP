@@ -10,11 +10,14 @@ import MongoDB from './pages/MongoDB'
 import Navbar from './components/Navbar'
 import ViewSqlTable from './pages/ViewSqlTable'
 import ViewMongoDocument from './pages/ViewMongoDocument'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 function App() {
   return (
     <BrowserRouter>
     <Navbar/>
+    <ToastContainer />
       <Routes>
           <Route path = "/login" element = {<LoginSignupProtectedRoute component = {Login}/>}/>
           <Route path = "/signup" element = {<LoginSignupProtectedRoute component = {Signup}/>}/>

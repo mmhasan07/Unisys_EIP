@@ -35,3 +35,68 @@ module.exports.getDocumentData = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+
+
+module.exports.createDocument = async (req, res) => {
+    const { documentName, document } = req.body;
+
+    try {
+        if (!documentName) {
+            return res.status(400).json({ error: 'Document name is required' });
+        }
+
+        const Model = mongoose.connection.model(documentName);
+
+        const createdDocument = await Model.create(document);
+        res.status(201).json({ success: true, document: createdDocument });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+module.exports.editDocument = async (req, res) => {
+    const { documentName, document } = req.body;
+
+    try {
+        if (!documentName) return res.status(400).json({ error: 'Document name is required' });
+
+        const Model = mongoose.connection.model(documentName);
+
+        const { _id, ...updatedFields } = document;
+
+        const result = await Model.updateOne({ _id }, { $set: updatedFields });
+
+        res.status(201).json({ success: true, document });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+module.exports.deleteDocument = async (req, res) => {
+    const { documentName, _id } = req.body;
+
+    try {
+
+        const Model = mongoose.connection.model(documentName);
+
+        const result = await Model.deleteOne({ _id });
+
+        if (result.deletedCount === 1) {
+            return res.json({ success: true, documentName });
+        } else {
+            return res.status(404).json({ error: 'Document not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import axios from "axios";
 import { signupRoute } from "../utils/APIRoutes";
@@ -119,7 +119,6 @@ function Signup() {
         </form>
 
       </FormContainer>
-      <ToastContainer />
     </>
   );
 }
