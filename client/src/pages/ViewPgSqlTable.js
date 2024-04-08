@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom'
 import { host } from '../utils/APIRoutes'
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import EditModal from '../components/SQL_components/EditModal';
-import CreateModal from '../components/SQL_components/CreateModal';
+import EditModal from '../components/PgSQL_modal/EditModal';
+import CreateModal from '../components/PgSQL_modal/CreateModal';
 import { toast } from "react-toastify";
-import { sqlDeleteRowRoute } from '../utils/APIRoutes'
+import { pgsqlDeleteRowRoute } from '../utils/APIRoutes'
 import ShareModal from '../components/ShareModal/ShareModal'
 
 
@@ -20,17 +20,16 @@ const ViewTable = () => {
     const [tableRow, setTableRow] = useState({})
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-    const [editableRow, setEditableRow] = useState({})
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-
+    const [editableRow, setEditableRow] = useState({})
 
     const fetchData = async () => {
-        const resp = await axios.get(`${host}/api/sql/tables/data/get/${tableName}`)
+        const resp = await axios.get(`${host}/api/pgsql/pgtables/getRows/${tableName}`)
         setTableData(resp.data.tableData)
     }
 
     const fetchColumns = async() =>{
-        const resp = await axios.get(`${host}/api/sql/tables/data/getcol/${tableName}`)
+        const resp = await axios.get(`${host}/api/pgsql/pgtables/getColumns/${tableName}`)
         setTableRow(resp.data.columnNames)
     }
 
@@ -39,15 +38,9 @@ const ViewTable = () => {
         fetchColumns()
     }, [])
 
-    useEffect(() => {
-        console.log(99999)
-        console.log(tableData)
-        console.log(tableRow)
-    }, [tableData, tableRow])
-
     const deleteRow = async (row) => {
         try {
-            const resp = await axios.delete(sqlDeleteRowRoute, {
+            const resp = await axios.delete(pgsqlDeleteRowRoute, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem(process.env.REACT_APP_CLIENT_KEY)}`
                 },
@@ -89,6 +82,7 @@ const ViewTable = () => {
             <div className=''> <button type="button" className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500" onClick={() => setIsCreateModalOpen(true)}><i className="fas fa-plus"></i> Create Row </button>  </div>
             <div className='ml-[85%]'> <button type="button" className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500" onClick={() => setIsShareModalOpen(true)}><i className="fas fa-plus"></i> Share Data </button>  </div>
             </div>
+
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 w-[100%]">
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -124,8 +118,8 @@ const ViewTable = () => {
                         {
                             isCreateModalOpen && <CreateModal row={tableRow} setIsModalOpen={setIsCreateModalOpen} fetchData={fetchData} tableName={tableName} />
                         }
-                          {
-                            isShareModalOpen && <ShareModal fromDbName={"mysql"} setIsModalOpen={setIsShareModalOpen} fromTableName={tableName} fromTableData={tableData}/>
+                        {
+                            isShareModalOpen && <ShareModal fromDbName={"pgsql"} setIsModalOpen={setIsShareModalOpen} fromTableName={tableName} fromTableData={tableData}/>
                         }
                     </div>
                 </div>

@@ -10,15 +10,27 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { mongoDeleteDocumentRoute } from '../utils/APIRoutes'
+import ShareModal from '../components/ShareModal/ShareModal'
+
 
 
 
 const ViewTable = () => {
     const { documentName } = useParams();
     const [tableData, setTableData] = useState([]);
+    const sharableData = getSharableData(tableData)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [editableDocument, setEditableDocument] = useState({})
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+
+    function getSharableData(data) {
+        return data.map(obj => {
+          const { _id, _v, ...rest } = obj;
+          return rest;
+        });
+      }
+      
 
 
     const fetchData = async () => {
@@ -76,7 +88,10 @@ const ViewTable = () => {
     return (
         <div className="flex flex-col mt-5">
             <div className='t text-3xl m-auto'>{(documentName.toUpperCase())} Document</div>
-            <div className='ml-[85%]'> <button type="button" className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500" onClick={() => setIsCreateModalOpen(true)} ><i className="fas fa-plus"></i> Create Document</button>  </div>
+            <div className='flex flex-row'>
+                <div className=''> <button type="button" className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500" onClick={() => setIsCreateModalOpen(true)}><i className="fas fa-plus"></i> Create Document </button>  </div>
+                <div className='ml-[85%]'> <button type="button" className="py-2 px-4 bg-blue-500 text-white rounded font-medium hover:bg-blue-700 mr-2 transition duration-500" onClick={() => setIsShareModalOpen(true)}><i className="fas fa-plus"></i> Share Data </button>  </div>
+            </div>
             <div className="py-2 align-middle inline-block w-[100%] sm:px-6 lg:px-8">
                 {tableData.map((document, index) => (
                     <div key={index} className="shadow mb-4 p-4 bg-gray-100 sm:rounded-lg">
@@ -95,6 +110,9 @@ const ViewTable = () => {
             }
             {
                 isCreateModalOpen && <CreateModal document={editableDocument} setIsModalOpen={setIsCreateModalOpen} fetchData={fetchData} documentName={documentName} />
+            }
+            {
+                isShareModalOpen && <ShareModal fromDbName={"mongo"} setIsModalOpen={setIsShareModalOpen} fromTableName={documentName} fromTableData={sharableData}/>
             }
         </div>
     );

@@ -6,12 +6,14 @@ import Signup from './pages/Signup'
 import { ProtectedRoute, LoginSignupProtectedRoute } from './utils/ProtectedRoutes'
 import ReduxDemo from './ReduxDemo'
 import MySQL from './pages/MySQL'
+import PgSql from './pages/PgSql'
 import MongoDB from './pages/MongoDB'
 import Navbar from './components/Navbar'
 import ViewSqlTable from './pages/ViewSqlTable'
 import ViewMongoDocument from './pages/ViewMongoDocument'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
+import ViewPgSqlTable from './pages/ViewPgSqlTable'
 
 function App() {
   return (
@@ -24,7 +26,9 @@ function App() {
           <Route path = "/" element = {<ProtectedRoute component = {Home}/>}/>
           <Route path = "/mongo" element = {<ProtectedRoute component = {MongoDB}/>}/>
           <Route path = "/mysql" element = {<ProtectedRoute component = {MySQL}/>}/>
+          <Route path = "/pgsql" element = {<ProtectedRoute component = {PgSql}/>}/>
           <Route path = "/mysql/viewTable/:tableName" element = {<ProtectedRoute component = {ViewSqlTable}/>}/>
+          <Route path = "/pgsql/viewTable/:tableName" element = {<ProtectedRoute component = {ViewPgSqlTable}/>}/>
           <Route path = "/mongo/viewTable/:documentName" element = {<ProtectedRoute component = {ViewMongoDocument}/>}/>
 
           {/* ********** Redux Demo ******************* */}

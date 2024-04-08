@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import mysqlImg from '../assets/mysql.png';
 import mongoImg from '../assets/mongo.png';
+import pgsqlImg from '../assets/pgsql.png'
 
 function Home() {
   const navigate = useNavigate()
@@ -20,6 +21,9 @@ function Home() {
         </div>
         <div className='mx-8 cursor-pointer p-4 bg-[#F2F2F2] border rounded-lg'>
           <img onClick={handleOnCLick} src={mysqlImg}  alt='' name='mysql' />
+        </div>
+        <div className='mx-8 cursor-pointer p-4 bg-[#F2F2F2] border rounded-lg'>
+          <img onClick={handleOnCLick} src={pgsqlImg}  alt='' name='pgsql' />
         </div>
       </div>
     </div>

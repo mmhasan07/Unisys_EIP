@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 module.exports.getDocuments = async (req, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray();
@@ -50,6 +51,19 @@ module.exports.createDocument = async (req, res) => {
 
         const createdDocument = await Model.create(document);
         res.status(201).json({ success: true, document: createdDocument });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+module.exports.createMultipleDocument = async (req, res) => {
+    const { documentName, documents } = req.body; //documents is array of documents
+
+    try {
+       
+        
 
     } catch (error) {
         console.error(error);

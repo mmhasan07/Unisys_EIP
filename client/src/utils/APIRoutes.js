@@ -10,6 +10,11 @@ export const sqlEditRowRoute = `${host}/api/sql/tables/data/edit`
 export const sqlDeleteRowRoute = `${host}/api/sql/tables/data/delete`
 
 
+export const pgsqlCreateRowRoute = `${host}/api/pgsql/pgtables/data/create`
+export const pgsqlDeleteRowRoute = `${host}/api/pgsql/pgtables/data/delete`
+export const pgsqlEditRowRoute = `${host}/api/pgsql/pgtables/data/edit` 
+
+
 export const mongoCreateDocumentRoute = `${host}/api/mongo/documents/data/create`
 export const mongoEditDocumentRoute =   `${host}/api/mongo/documents/data/edit`
 export const mongoDeleteDocumentRoute = `${host}/api/mongo/documents/data/delete`
