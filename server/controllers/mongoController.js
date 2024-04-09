@@ -1,97 +1,160 @@
-const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
+const { connectToMongo } = require('../Databases/mongoConnector');
 
 
 module.exports.getDocuments = async (req, res) => {
     try {
-        const collections = await mongoose.connection.db.listCollections().toArray();
+        const { client, db } = await connectToMongo();
+        const collections = await db.listCollections().toArray();
         const tables = collections.map((collection) => collection.name);
-
         res.json({ tables });
+        // Close the MongoDB connection after using it
+        await client.close();
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 
 module.exports.getDocumentData = async (req, res) => {
     try {
+        const { client, db } = await connectToMongo();
         const { documentName } = req.params;
 
         if (!documentName) {
-            return res.status(400).json({ error: 'Document name is required' });
+            return res.status(400).json({ error: 'Collection name is required' });
         }
 
-        const Model = mongoose.connection.model(documentName);
+        const collection = db.collection(documentName);
 
-        if (!Model) {
-            return res.status(404).json({ error: 'Collection not found' });
-        }
+        const collectionData = await collection.find({}).toArray();
 
-        const documentData = await Model.find({});
+        res.json({ documentData: collectionData });
 
-        res.json({ documentData });
+        // Close the MongoDB connection after using it
+        await client.close();
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 
 
 module.exports.createDocument = async (req, res) => {
-    const { documentName, document } = req.body;
-
     try {
-        if (!documentName) {
-            return res.status(400).json({ error: 'Document name is required' });
+        const { client, db } = await connectToMongo();
+        const { documentName, document } = req.body;
+
+        if (!documentName || !document) {
+            return res.status(400).json({ error: 'Collection name and document are required' });
         }
 
-        const Model = mongoose.connection.model(documentName);
+        const collection = db.collection(documentName);
 
-        const createdDocument = await Model.create(document);
-        res.status(201).json({ success: true, document: createdDocument });
+        const result = await collection.insertOne(document);
 
+        if (result.acknowledged) {
+            res.status(201).json({ success: true, message: 'Entry created successfully' });
+        } else {
+            res.status(500).json({ error: 'Failed to create entry' });
+        }
+
+        // Close the MongoDB connection after using it
+        await client.close();
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
-module.exports.createMultipleDocument = async (req, res) => {
-    const { documentName, documents } = req.body; //documents is array of documents
 
-    try {
+// module.exports.createMultipleDocument = async (req, res) => {
+//     const { documentName, documents } = req.body; //documents is array of documents
+
+//     try {
        
         
 
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// };
+
+module.exports.createMultipleDocuments = async (req, res) => {
+    try {
+        const { client, db } = await connectToMongo();
+        const { collectionName, documents } = req.body;
+
+        if (!collectionName || !Array.isArray(documents) || documents.length === 0) {
+            return res.status(400).json({ error: 'Collection name and non-empty array of documents are required' });
+        }
+
+        const collection = db.collection(collectionName);
+
+        const result = await collection.insertMany(documents);
+
+        if (result.acknowledged) {
+            res.status(201).json({ success: true, message: 'Entries created successfully' });
+        } else {
+            res.status(500).json({ error: 'Failed to create entries' });
+        }
+
+        // Close the MongoDB connection after using it
+        await client.close();
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 
 
 module.exports.editDocument = async (req, res) => {
     const { documentName, document } = req.body;
+    console.log(999)
 
     try {
-        if (!documentName) return res.status(400).json({ error: 'Document name is required' });
+        if (!documentName || !document || !document._id) {
+            return res.status(400).json({ error: 'Document name and document with _id are required' });
+        }
 
-        const Model = mongoose.connection.model(documentName);
+        const { client, db } = await connectToMongo();
+        const collection = db.collection(documentName);
 
-        const { _id, ...updatedFields } = document;
+        const existingDocument = await collection.findOne({_id: new ObjectId(document._id) });
+        if (!existingDocument) {
+            return res.status(404).json({ error: 'Document not found' });
+        }
 
-        const result = await Model.updateOne({ _id }, { $set: updatedFields });
+        const updatedDocument = { ...document }; // Make a copy of the document object
+        delete updatedDocument._id; // Remove _id field from the updated document object
 
-        res.status(201).json({ success: true, document });
+        console.log('Existing document:', existingDocument);
+        console.log('Updated document:', updatedDocument);
 
+        const result = await collection.updateOne(
+            { _id: new ObjectId(document._id) }, // Filter by _id
+            { $set: updatedDocument } // Update with the new document fields
+        );
+
+        console.log(result)
+        await client.close();
+
+
+        if (result.acknowledged && result.modifiedCount > 0 ) {
+            return res.status(200).json({ success: true, document });
+        } else {
+            return res.status(500).json({ error: 'Failed to edit entry' });
+        }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+
 
 
 
@@ -100,9 +163,12 @@ module.exports.deleteDocument = async (req, res) => {
 
     try {
 
-        const Model = mongoose.connection.model(documentName);
+        const { client, db } = await connectToMongo();
+        const collection = db.collection(documentName);
 
-        const result = await Model.deleteOne({ _id });
+        const result = await collection.deleteOne( { _id: new ObjectId(_id) });
+
+        await client.close()
 
         if (result.deletedCount === 1) {
             return res.json({ success: true, documentName });

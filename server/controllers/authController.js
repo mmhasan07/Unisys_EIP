@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
-const Salary = require("../models/SalaryModel");
 
 module.exports.signup = async (req, res, next) => {
   try {
@@ -43,18 +42,7 @@ module.exports.login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
     let user = await User.findOne({ username });
-    let salhary = await Salary.create(
-      {
-    "employeeId": 1,
-    "employeeName": "John Doe",
-    "designation": "Software Engineer",
-    "department": "Engineering",
-    "salary": 80000,
-    "bonus": 5000,
-    "deductions": 2000,
-    "netSalary": 83000
-  }
-    )
+    
     if (!user) {
       return res.status(401).json({
         status: false,

@@ -1,12 +1,17 @@
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 
-mongoose.set('strictQuery', false);
-
-
-const connectToMongo = () => {
-  mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB Successfully"))
-  .catch((err) => console.log(err.message))
+const connectToMongo = async () => {
+    try {
+        const connectionString = process.env.MONGO_URI || "";
+        const client = new MongoClient(connectionString);
+        await client.connect();
+        console.log("Connected to MongoDB");
+        const db = client.db("test");
+        return { client, db };
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        throw error; // Re-throw the error to handle it elsewhere
+    }
 };
 
-module.exports = connectToMongo;
+module.exports = { connectToMongo };

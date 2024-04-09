@@ -61,7 +61,7 @@ const ViewTable = () => {
                 }
             });
             await fetchData()
-            toast.success("Row Deleted Successfully", toastOptions)
+            toast.success("Document Deleted Successfully", toastOptions)
 
         } catch (err) {
             toast.error("Some error occoured", toastOptions);

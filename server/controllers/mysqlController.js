@@ -118,7 +118,6 @@ module.exports.createMultipleRows = async (req, res) => {
   try {
     const { tableName, data } = req.body;
 
-    // Construct the SQL query string
     const columns = Object.keys(data[0]).join(',');
     const values = data.map(row => '(' + Object.values(row).map(value => `'${value}'`).join(',') + ')').join(',');
     const query = `INSERT INTO ${tableName} (${columns}) VALUES ${values}`;

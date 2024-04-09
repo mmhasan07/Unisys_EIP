@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from "react-toastify";
-import { pgsqlCreateRowRoute } from '../../utils/APIRoutes';
 import axios from 'axios'
 
 
@@ -46,6 +45,10 @@ const Modal = ({ fromDbName, setIsModalOpen, fetchData, fromTableName, fromTable
         }
     }, [selectedDatabase]);
 
+    useEffect(() => {
+        console.log(selectedTable)
+    }, [selectedTable])
+
     const handleDatabaseChange = (event) => {
         setSelectedDatabase(event.target.value);
     };
@@ -66,12 +69,16 @@ const Modal = ({ fromDbName, setIsModalOpen, fetchData, fromTableName, fromTable
 
     const handleOnShare = () => {
         if (selectedDatabase === "mongo") {
-            axios.post(`http://localhost:8080/api/mongo/documents/get`)
+            console.log(selectedTable)
+            axios.post(`http://localhost:8080/api/mongo/documents/data/create/multiple`, {
+                collectionName: selectedTable,
+                documents: fromTableData
+            })
                 .then(response => {
                     toast.success("data transferred successfully", toastOptions)
                 })
                 .catch(error => {
-                    console.error('Error fetching tables:', error);
+                    console.error('Error fetching documents:', error);
                     toast.error("InCompatible Tables/Documents", toastOptions)
                 }).finally(() => setIsModalOpen(false))
         }
@@ -124,7 +131,7 @@ const Modal = ({ fromDbName, setIsModalOpen, fetchData, fromTableName, fromTable
 
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <label htmlFor="database" className="block text-sm font-medium text-gray-700 mb-1">Select DB</label>
-                                <select id="database" name="database" onChange={handleDatabaseChange} className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
+                                <select id="database" name="database" value={selectedDatabase} onChange={handleDatabaseChange} className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
                                     <option value="mongo">MongoDB</option>
                                     <option value="mysql">MySQL</option>
                                     <option value="pgsql">PgSql</option>
@@ -133,7 +140,7 @@ const Modal = ({ fromDbName, setIsModalOpen, fetchData, fromTableName, fromTable
 
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <label htmlFor="tablename" className="block text-sm font-medium text-gray-700 mb-1">Select table/Document</label>
-                                <select id="tablename" name="tablename" onChange={handleTableChange} className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
+                                <select id="tablename" name="tablename" value={selectedTable} onChange={handleTableChange} className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:outline-none focus:ring focus:border-blue-300">
                                     {tables.map(table => (
                                         <option key={table} value={table}>{table}</option>
                                     ))}
