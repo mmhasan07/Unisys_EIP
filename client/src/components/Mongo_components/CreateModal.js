@@ -57,7 +57,6 @@ const Modal = ({ document, setIsModalOpen, fetchData, documentName }) => {
       <div
         className="fixed z-10 overflow-y-auto top-0 w-full left-0 "
         id="modal"
-        style={{ maxHeight: "100vh" }}
       >
         <div className="flex items-center justify-center min-height-100vh pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <div className="fixed inset-0 transition-opacity">
@@ -67,11 +66,11 @@ const Modal = ({ document, setIsModalOpen, fetchData, documentName }) => {
             &#8203;
           </span>
           <div
-            className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+            className="inline-block align-bottom bg-white rounded-lg text-left overflow-y-auto shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-headline"
-            style={{ maxHeight: "80vh", overflowY: "auto" }}
+            style={{ maxHeight: "85vh", overflowY: "auto" }}
           >
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               {Object.keys(document).map((key) => {
