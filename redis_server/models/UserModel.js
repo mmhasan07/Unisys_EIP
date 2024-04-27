@@ -14,6 +14,15 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     max: 50,
   },
+  organization: {
+    type: String,
+    unique: false,
+    required: true,
+  },
+  subscribedChannels: {
+    type: [String], 
+    default: [ "EIP" ]
+  },
   password: {
     type: String,
     required: true,

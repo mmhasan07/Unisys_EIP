@@ -1,4 +1,5 @@
 const { createClient } = require('redis')
+const { initiateSubscribers } = require('./subscriberInitiator')
 
 const client = createClient({
     password: '2xFEFcRtG70XEm3ykuq0ZnyOgvNwldGZ',
@@ -8,17 +9,8 @@ const client = createClient({
     }
 });
 
-const arr = ["orders", "clients", "prods"]
+initiateSubscribers(client)
 
-arr.map(async (channel) => {
-    const subscriber = client.duplicate();
-
-    await subscriber.connect();
-
-    await subscriber.subscribe(channel, (message) => {
-        console.log(channel, ":", message);
-    });
-})
 
 module.exports = client;
 
