@@ -20,8 +20,8 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   subscribedChannels: {
-    type: [String], 
-    default: [ "EIP" ]
+    type: [String],
+    default: ["EIP"]
   },
   password: {
     type: String,

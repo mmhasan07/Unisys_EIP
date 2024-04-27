@@ -6,6 +6,7 @@ const AuthRoutes = require('./routes/authRoutes');
 const RedisRoutes = require('./routes/redisRoutes');
 const EmailRoutes = require('./routes/emailRoutes');
 const ChannelsRoutes = require('./routes/channelsRoutes');
+const DataRoutes = require('./routes/dataRoutes');
 const client = require('./redis/redisConnector')
 const emailTransporter = require('./utils/emailTransporter')
 
@@ -22,6 +23,7 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/redis', RedisRoutes);
 app.use('/api/email', EmailRoutes);
 app.use('/api/channels', ChannelsRoutes);
+app.use('/api/data', DataRoutes);
 
 const server = http.createServer(app);
 

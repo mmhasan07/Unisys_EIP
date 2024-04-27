@@ -28,7 +28,8 @@ module.exports.sendMailApi = async (req, res, next) => {
 
 module.exports.emailAllSubscribers = async (channelName, subject, text, html) => {
   try {
-    const users = await User.find({ subscribedChannels: channelName }, { email: 1, _id: 0 });
+    const users = await User.find( { subscribedChannels: { $in: [channelName] } });
+    
     const promises = [];
 
     console.log(users)

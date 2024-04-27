@@ -107,6 +107,7 @@ module.exports.login = async (req, res, next) => {
       user: {
         id: user._id,
         username: user.username,
+        organization: user.organization,
         email: user.email,
       },
     };
