@@ -7,7 +7,7 @@ module.exports.publish = async (req, res, next) => {
   try {
     const { channel, message } = req.body;
     const { username, organization } = req.user;
-    console.log(req.user)
+
     const user = await User.findOne({ username });
     const channelInDb = await Channels.findOne({ channelName: channel })
 
@@ -25,7 +25,7 @@ module.exports.publish = async (req, res, next) => {
       })
       if(!data) res.status(400).send({ status: false, msg: "Some error" });
 
-      await publisher.publish(channel, JSON.stringify(message));
+      await publisher.publish(channel, JSON.stringify({ username }));
       res.status(200).send({ status: true, msg: "Event published" });
     }
     else {

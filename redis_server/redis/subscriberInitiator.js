@@ -9,9 +9,16 @@ module.exports.initiateSubscribers = async (client) => {
     await Promise.all(channels.map(async (channel) => {
         const subscriber = client.duplicate();
         await subscriber.connect();
-        await subscriber.subscribe(channel.channelName, async(message) => {
-            console.log(channel.channelName, ":", message);
-         const result = await emailAllSubscribers(channel.channelName, "From Saishwar", "That was easy!", "<b>Hey there! </b><br> Node mailer test Mail<br/>")
+        await subscriber.subscribe(channel.channelName, async(data) => {
+            const dataObj = JSON.parse(data)
+         const result = await emailAllSubscribers(
+            channel.channelName, 
+            `"New Publish":Unisys EIP`, 
+            `Unisys EIP`, 
+            `<b>New data has been published !!</b><br/><br/>
+            Published by User - <b>${dataObj.username}</b><br/> 
+            Channel - <b>${channel.channelName}</b>`
+        )
          console.log(result)
         });
     }));
