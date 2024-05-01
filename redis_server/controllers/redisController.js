@@ -53,14 +53,38 @@ module.exports.subscribe = async (req, res, next) => {
       const user = await User.findOne({ username })
 
       if (user.subscribedChannels.includes(channelName))
-        res.status(400).send({ status: false, msg: "You are already subscribed" });
+        res.send({ status: false, msg: "You are already subscribed" });
 
       await User.findByIdAndUpdate(user._id, { $addToSet: { subscribedChannels: channelName } });
       res.status(200).send({ status: true, msg: "Subscription successful" });
     }
     else {
-      res.status(401).send({ status: false, msg: "Your organization is not authorized to subscribe to this channel" });
+      res.send({ status: false, msg: "Your organization is not authorized to subscribe to this channel" });
     }
+
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+
+module.exports.unsubscribe = async (req, res, next) => {
+  try {
+    const { channelName } = req.body;
+    const { username } = req.user;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.send({ status: false, msg: "User not found" });
+    }
+
+    if (!user.subscribedChannels.includes(channelName)) {
+      return res.send({ status: false, msg: "You are not subscribed to this channel" });
+    }
+
+    await User.findByIdAndUpdate(user._id, { $pull: { subscribedChannels: channelName } });
+    res.status(200).send({ status: true, msg: "Unsubscribed successfully" });
 
   } catch (ex) {
     next(ex);
