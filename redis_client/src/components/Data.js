@@ -96,6 +96,7 @@ const Data = ({selectedFilterChannel}) => {
                         <pre>
                             <JsonView
                                 data={document.data}
+                                // data={document} //seen by feature
                                 shouldExpandNode={allExpanded}
                                 style={defaultStyles}
                             />

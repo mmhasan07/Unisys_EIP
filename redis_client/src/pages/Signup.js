@@ -67,8 +67,8 @@ function Signup() {
         const data = resp.data
     
         if(resp.data.status === true){
-          sessionStorage.setItem(process.env.REACT_APP_CLIENT_KEY, data.authToken);
-          navigate('/')
+          toast.success("User created successfully", toastOptions)
+          navigate('/login')
         }
         else  toast.error(data.msg, toastOptions);
         

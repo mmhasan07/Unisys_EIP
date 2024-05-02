@@ -17,7 +17,9 @@ const Publish = () => {
                     Authorization: `Bearer ${authToken}`
                 }
             });
-            setChannels(response.data.channels);
+            const channels_all = response.data.channels
+            const filteredChannels =  channels_all.filter(channel => channel.authorizedOrganizations.includes(sessionStorage.getItem("organization")))
+            setChannels(filteredChannels);
         } catch (error) {
             console.error('Error fetching channels:', error);
         }

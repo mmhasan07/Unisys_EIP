@@ -29,7 +29,7 @@ module.exports.publish = async (req, res, next) => {
       res.status(200).send({ status: true, msg: "Event published" });
     }
     else {
-      res.status(401).send({ status: false, msg: "Your organization is not authorized to publish on this channel" });
+      res.send({ status: false, msg: "Your organization is not authorized to publish on this channel" });
     }
 
   } catch (ex) {
