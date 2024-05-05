@@ -6,8 +6,8 @@ module.exports.sendMailApi = async (req, res, next) => {
     const { to, subject, text, html } = req.body
 
     const mailData = {
-      from: "saishwaranand132@gmail.com",
-      // from: "eip.final.year.proj@gmail.com",
+      // from: "saishwaranand132@gmail.com",
+      from: "eip.final.year.proj@gmail.com",
       to,
       subject,
       text,
@@ -36,8 +36,8 @@ module.exports.emailAllSubscribers = async (channelName, subject, text, html) =>
 
     users.forEach((user) => {
       const mailData = {
-        from: 'saishwaranand132@gmail.com',
-        // from: 'eip.final.year.proj@gmail.com',
+        // from: 'saishwaranand132@gmail.com',
+        from: 'eip.final.year.proj@gmail.com',
         to: user.email,
         subject,
         text,
