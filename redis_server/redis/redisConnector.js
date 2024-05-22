@@ -2,10 +2,10 @@ const { createClient } = require('redis')
 const { initiateSubscribers } = require('./subscriberInitiator')
 
 const client = createClient({
-    password: '2xFEFcRtG70XEm3ykuq0ZnyOgvNwldGZ',
+    password: '9Ked4vrJ99bwYHlcoFivIxtEwHGVDZnu',
     socket: {
-        host: 'redis-16218.c212.ap-south-1-1.ec2.cloud.redislabs.com',
-        port: 16218
+        host: 'redis-11948.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
+        port: 11948
     }
 });
 
