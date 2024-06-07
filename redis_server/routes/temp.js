@@ -10,7 +10,7 @@ const client = redis.createClient({
 // Assuming you have a router instance
 router.post("/publish", (req, res) => {
   // Extract event data from request body
-  const { channel, message } = req.body;
+  const { channel, message } = req.body;ß
 
   // Publish the event to Redis
   client.publish(channel, JSON.stringify(message), (err) => {

@@ -12,6 +12,7 @@ import AllChannels from './components/AllChannels'
 import CreateChannel from './components/CreateChannel'
 import Subscribe from './components/Subscribe'
 import Publish from './components/Publish'
+import MultiOrganizations from './pages/MultiOrganizations'
 
 
 
@@ -29,6 +30,7 @@ function App() {
           <Route path = "/createChannel" element = {<ProtectedRoute component = {CreateChannel}/>}/>
           <Route path = "/publish" element = {<ProtectedRoute component = {Publish}/>}/>
           <Route path = "/subscribe" element = {<ProtectedRoute component = {Subscribe}/>}/>
+          <Route path = "/addmultiorgs" element = {<ProtectedRoute component = {MultiOrganizations}/>}/>
       </Routes>
     </BrowserRouter>
   )

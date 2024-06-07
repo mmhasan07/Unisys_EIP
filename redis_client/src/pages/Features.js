@@ -26,6 +26,13 @@ const Features = () => {
             <div onClick={() => handleClick("/")} className='m-4 w-[30%] cursor-pointer p-4 bg-[#F2F2F2] border rounded-lg text-center'>
                 <h2 className='text-lg font-semibold'>View Data</h2>
             </div>
+            {
+                sessionStorage.getItem("username") == "admin" && (
+                    <div onClick={() => handleClick("/addmultiorgs")} className='m-4 w-[30%] cursor-pointer p-4 bg-[#F2F2F2] border rounded-lg text-center'>
+                    <h2 className='text-lg font-semibold'>Add multiple Organizations</h2>
+                    </div>
+                )
+            }
         </div>
     );
 };

@@ -85,3 +85,44 @@ module.exports.deleteChannel = async (req, res, next) => {
     return res.status(500).json({ status: false, msg: "Internal server error occurred" });
   }
 };
+
+module.exports.addMultiOrgs = async (req, res, next) => {
+  try {
+    const { channelName, organization } = req.body;
+    const { username } = req.user;
+
+    if (username !== "admin") {
+      return res.status(403).json({ status: false, msg: "Unauthorized" });
+    }
+
+    const channel = await Channels.findOneAndUpdate(
+      { channelName: channelName.toUpperCase() },
+      { $addToSet: { authorizedOrganizations: organization } },
+      { new: true }
+    );
+
+    if (!channel) {
+      return res.status(404).json({ status: false, msg: "Channel not found" });
+    }
+
+    return res.status(201).json({ status: true, channelName: channel.channelName });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+
+module.exports.getAllOrgs = async (req, res, next) => {
+  try {
+    const { username } = req.user;
+
+    const allUsers = await Users.find({}, 'organization');
+
+    // Extract unique organizations
+    const uniqueOrgs = [...new Set(allUsers.map(user => user.organization))];
+
+    return res.status(200).json({ status: true, allOrganizations: uniqueOrgs });
+  } catch (ex) {
+    next(ex);
+  }
+};

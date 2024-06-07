@@ -5,7 +5,7 @@ const emailTransporter = nodemailer.createTransport({
     auth: {
         // user: "saishwaranand132@gmail.com",
         user: "eip.final.year.proj@gmail.com",
-        pass: "trnu gizn mela ygxg",
+        pass: "rwsc mtto cawv wdar",
     },
 });
 
